@@ -32,8 +32,8 @@ class TestFormatCurrency:
 class TestGetTopServices:
     """Tests for get_top_services function."""
     
-    def test_returns_top_5_by_default(self):
-        """Should return top 5 services by cost."""
+    def test_returns_top_10_by_default(self):
+        """Should return top 10 services by cost."""
         services = [
             ("Service A", 10.0),
             ("Service B", 50.0),
@@ -41,11 +41,16 @@ class TestGetTopServices:
             ("Service D", 20.0),
             ("Service E", 40.0),
             ("Service F", 5.0),
+            ("Service G", 15.0),
+            ("Service H", 25.0),
+            ("Service I", 35.0),
+            ("Service J", 45.0),
+            ("Service K", 3.0),
         ]
         result = get_top_services(services)
-        assert len(result) == 5
+        assert len(result) == 10
         assert result[0] == ("Service B", 50.0)
-        assert result[1] == ("Service E", 40.0)
+        assert result[1] == ("Service J", 45.0)
     
     def test_fewer_than_limit(self):
         """Should return all services if fewer than limit."""
@@ -85,17 +90,21 @@ class TestFetchSimulatedCosts:
         assert 10.0 <= data.month_to_date <= 500.0
     
     def test_top_services_limit(self):
-        """Should return at most 5 top services."""
+        """Should return at most 10 top services."""
         data = fetch_simulated_costs()
-        assert len(data.top_services) <= 5
+        assert len(data.top_services) <= 10
     
-    def test_services_have_names_and_costs(self):
-        """Each service should have name and cost."""
+    def test_services_have_names_costs_and_activity(self):
+        """Each service should have name, cost, and activity count."""
         data = fetch_simulated_costs()
-        for service_name, cost in data.top_services:
+        for service_data in data.top_services:
+            assert len(service_data) == 3, "Expected (name, cost, activity) tuple"
+            service_name, cost, activity = service_data
             assert isinstance(service_name, str)
             assert len(service_name) > 0
             assert isinstance(cost, float)
+            assert isinstance(activity, int)
+            assert activity >= 0
 
 
 # Property-Based Tests
@@ -134,7 +143,7 @@ class TestTopServicesProperty:
     **Validates: Requirements 3.1, 3.2**
     
     For any list of services with costs, the get_top_services function SHALL return
-    at most 5 services, sorted by cost in descending order, where each entry
+    at most 10 services, sorted by cost in descending order, where each entry
     contains both service name and cost.
     """
     
@@ -147,10 +156,10 @@ class TestTopServicesProperty:
         min_size=0,
         max_size=20
     ))
-    def test_top_services_returns_at_most_5(self, services):
-        """Should return at most 5 services."""
+    def test_top_services_returns_at_most_10(self, services):
+        """Should return at most 10 services."""
         result = get_top_services(services)
-        assert len(result) <= 5, f"Expected at most 5 services, got {len(result)}"
+        assert len(result) <= 10, f"Expected at most 10 services, got {len(result)}"
     
     @settings(max_examples=100)
     @given(st.lists(

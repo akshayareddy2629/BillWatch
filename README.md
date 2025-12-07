@@ -1,4 +1,4 @@
-# 💎 AWS BillWatch : Cost Widget
+# 💎 AWS Cost Widget
 
 > **"I hate checking the bill manager on console, so I built this."**
 
@@ -10,7 +10,7 @@ A premium, always-on-top desktop widget that displays your AWS spending in real-
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 <p align="center">
-  <img src="Gemini_Generated_Image_djpgzmdjpgzmdjpg.jpg" alt="AWS Cost Widget Preview" width="350"/>
+  <img src="docs/widget-preview.png" alt="AWS Cost Widget Preview" width="350"/>
 </p>
 
 ## ✨ Features
@@ -35,7 +35,7 @@ A premium, always-on-top desktop widget that displays your AWS spending in real-
 
 ```bash
 # Clone the repository
-git clone https://github.com/akshayareddy2629/BillWatch.git
+git clone https://github.com/yourusername/aws-cost-widget.git
 cd aws-cost-widget
 
 # Install dependencies

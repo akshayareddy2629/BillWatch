@@ -25,7 +25,7 @@ from scheduler import UpdateScheduler
 def show_error_dialog(title: str, message: str) -> None:
     """Show an error dialog using tkinter."""
     import tkinter as tk
-    from tkinter import messagebox
+    from tkinter import messagebox      
     
     root = tk.Tk()
     root.withdraw()  # Hide main window

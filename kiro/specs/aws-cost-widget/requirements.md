@@ -43,9 +43,30 @@ This document specifies the requirements for a minimal AWS Cost Widget - a cross
 
 #### Acceptance Criteria
 
-1. WHEN the widget displays top services THEN the Widget SHALL show up to 5 services with the highest spending
+1. WHEN the widget displays top services THEN the Widget SHALL show up to 10 services with the highest spending
 2. WHEN displaying each top service THEN the Widget SHALL show the service name and its associated cost
 3. WHEN the top services data changes THEN the Widget SHALL update the displayed list to reflect current rankings
+
+### Requirement 9
+
+**User Story:** As a developer, I want accurate billing data from AWS Cost Explorer, so that I can trust the displayed cost information.
+
+#### Acceptance Criteria
+
+1. WHEN fetching cost data on the first day of the month THEN the Widget SHALL handle the edge case by using the previous day as the end date or showing zero costs
+2. WHEN the AWS Cost Explorer returns data THEN the Widget SHALL display all services with non-zero costs up to the configured limit
+3. WHEN parsing AWS Cost Explorer response THEN the Widget SHALL correctly extract and sum costs from all time periods in the response
+
+### Requirement 10
+
+**User Story:** As a developer, I want to see recent activity for each AWS service alongside its cost, so that I can understand what actions are driving my spending.
+
+#### Acceptance Criteria
+
+1. WHEN displaying a service in the top services list THEN the Widget SHALL show the recent activity count for that service from the last 24 hours
+2. WHEN fetching activity data THEN the Widget SHALL use AWS CloudTrail to retrieve API event counts per service
+3. WHEN a service has no recent activity THEN the Widget SHALL display "0 events" for that service
+4. WHEN CloudTrail access fails THEN the Widget SHALL continue displaying cost data without activity information
 
 ### Requirement 4
 

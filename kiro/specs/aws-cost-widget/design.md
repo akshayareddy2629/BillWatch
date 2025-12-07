@@ -90,7 +90,7 @@ Retrieves and formats AWS cost data.
 @dataclass
 class CostData:
     month_to_date: float  # Total MTD cost in USD
-    top_services: list[tuple[str, float]]  # [(service_name, cost), ...]
+    top_services: list[tuple[str, float, int]]  # [(service_name, cost, activity_count), ...]
     last_updated: datetime
 
 def fetch_aws_costs() -> CostData:
@@ -99,6 +99,10 @@ def fetch_aws_costs() -> CostData:
 
 def fetch_simulated_costs() -> CostData:
     """Generate simulated cost data for testing."""
+    pass
+
+def fetch_service_activity(service_names: list[str]) -> dict[str, int]:
+    """Fetch recent activity counts per service from CloudTrail."""
     pass
 
 def format_currency(amount: float) -> str:
@@ -170,11 +174,11 @@ def main() -> None:
 
 ### CostData
 
-| Field         | Type                    | Description                            |
-| ------------- | ----------------------- | -------------------------------------- |
-| month_to_date | float                   | Total spending from month start to now |
-| top_services  | list[tuple[str, float]] | Up to 5 services with highest costs    |
-| last_updated  | datetime                | Timestamp of last data fetch           |
+| Field         | Type                         | Description                                   |
+| ------------- | ---------------------------- | --------------------------------------------- |
+| month_to_date | float                        | Total spending from month start to now        |
+| top_services  | list[tuple[str, float, int]] | Up to 10 services with (name, cost, activity) |
+| last_updated  | datetime                     | Timestamp of last data fetch                  |
 
 ### WidgetConfig
 
@@ -221,7 +225,7 @@ _For any_ percentage value between 0 and 100+, the get_budget_color function SHA
   **Validates: Requirements 2.2, 2.3, 2.4**
 
 **Property 3: Top services list constraint**
-_For any_ list of services with costs, the get_top_services function SHALL return at most 5 services, sorted by cost in descending order, where each entry contains both service name and cost.
+_For any_ list of services with costs, the get_top_services function SHALL return at most 10 services, sorted by cost in descending order, where each entry contains both service name and cost.
 **Validates: Requirements 3.1, 3.2**
 
 **Property 4: Widget position boundary clamping**

@@ -85,7 +85,7 @@ class AWSCostWidget:
         
         # Widget dimensions
         self.width = 320
-        self.height = 380
+        self.height = 520
         
         # Position in bottom-right corner
         screen_width = self.root.winfo_screenwidth()
@@ -276,25 +276,34 @@ class AWSCostWidget:
         )
         services_title.pack(side=tk.LEFT)
         
+        # Activity hint
+        activity_hint = tk.Label(
+            services_header, text="⚡24h events",
+            font=("Helvetica", 7),
+            bg=COLOR_BG_PRIMARY, fg=COLOR_CYAN
+        )
+        activity_hint.pack(side=tk.RIGHT)
+        
         # Services list with premium styling
         self.services_frame = tk.Frame(self.main_frame, bg=COLOR_BG_PRIMARY)
         self.services_frame.pack(fill=tk.BOTH, expand=True)
         
         self.service_labels = []
-        for i in range(5):
+        for i in range(10):
             bg = COLOR_BG_SECONDARY if i % 2 == 0 else COLOR_BG_PRIMARY
             
             frame = tk.Frame(self.services_frame, bg=bg, padx=10, pady=5)
             frame.pack(fill=tk.X, pady=1)
             
             # Rank indicator
-            rank_colors = [COLOR_GOLD, COLOR_PURPLE_LIGHT, COLOR_PURPLE_MAIN, COLOR_FG_MUTED, COLOR_FG_MUTED]
+            rank_colors = [COLOR_GOLD, COLOR_PURPLE_LIGHT, COLOR_PURPLE_MAIN, COLOR_FG_MUTED, COLOR_FG_MUTED,
+                          COLOR_FG_MUTED, COLOR_FG_MUTED, COLOR_FG_MUTED, COLOR_FG_MUTED, COLOR_FG_MUTED]
             rank_label = tk.Label(
                 frame, text=f"#{i+1}",
                 font=("Helvetica", 8, "bold"),
                 bg=bg, fg=rank_colors[i]
             )
-            rank_label.pack(side=tk.LEFT, padx=(0, 8))
+            rank_label.pack(side=tk.LEFT, padx=(0, 6))
             
             name_label = tk.Label(
                 frame, text="",
@@ -304,6 +313,15 @@ class AWSCostWidget:
             )
             name_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
             
+            # Activity count (events in last 24h)
+            activity_label = tk.Label(
+                frame, text="",
+                font=("Helvetica", 8),
+                bg=bg, fg=COLOR_CYAN,
+                anchor=tk.E
+            )
+            activity_label.pack(side=tk.RIGHT, padx=(0, 8))
+            
             cost_label = tk.Label(
                 frame, text="",
                 font=("Helvetica", 9, "bold"),
@@ -312,7 +330,7 @@ class AWSCostWidget:
             )
             cost_label.pack(side=tk.RIGHT)
             
-            self.service_labels.append((frame, name_label, cost_label, rank_label))
+            self.service_labels.append((frame, name_label, cost_label, rank_label, activity_label))
         
         # ═══ FOOTER ═══
         footer = tk.Frame(self.main_frame, bg=COLOR_BG_PRIMARY)
@@ -385,16 +403,24 @@ class AWSCostWidget:
         self._update_progress_bar(budget_pct)
         
         # Update services
-        for i, (frame, name_label, cost_label, rank_label) in enumerate(self.service_labels):
+        for i, (frame, name_label, cost_label, rank_label, activity_label) in enumerate(self.service_labels):
             if i < len(cost_data.top_services):
-                service_name, service_cost = cost_data.top_services[i]
-                display_name = service_name[:26] + "..." if len(service_name) > 26 else service_name
+                service_data = cost_data.top_services[i]
+                # Handle both old format (name, cost) and new format (name, cost, activity)
+                if len(service_data) == 3:
+                    service_name, service_cost, activity_count = service_data
+                else:
+                    service_name, service_cost = service_data
+                    activity_count = 0
+                display_name = service_name[:22] + "..." if len(service_name) > 22 else service_name
                 name_label.config(text=display_name)
                 cost_label.config(text=format_currency(service_cost))
+                activity_label.config(text=f"⚡{activity_count}")
                 frame.pack(fill=tk.X, pady=1)
             else:
                 name_label.config(text="")
                 cost_label.config(text="")
+                activity_label.config(text="")
                 frame.pack_forget()
         
         # Update timestamp
