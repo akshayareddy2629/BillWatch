@@ -35,7 +35,7 @@ A premium, always-on-top desktop widget that displays your AWS spending in real-
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/aws-cost-widget.git
+git clone https://github.com/akshayareddy2629/BillWatch.git
 cd aws-cost-widget
 
 # Install dependencies
