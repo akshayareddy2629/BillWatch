@@ -1,4 +1,4 @@
-# 💎 AWS Cost Widget
+# 💎 AWS BillWatch : Cost Widget
 
 > **"I hate checking the bill manager on console, so I built this."**
 
