@@ -10,7 +10,7 @@ A premium, always-on-top desktop widget that displays your AWS spending in real-
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 <p align="center">
-  <img src="docs/widget-preview.png" alt="AWS Cost Widget Preview" width="350"/>
+  <img src="Gemini_Generated_Image_djpgzmdjpgzmdjpg.jpg" alt="AWS Cost Widget Preview" width="350"/>
 </p>
 
 ## ✨ Features
